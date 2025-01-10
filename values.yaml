@@ -2,7 +2,7 @@ nameOverride: "frontend"
 
 replicaCount: 1
 
-kind: StatefulSet
+kind: Deployment
 
 image:
   repository: nginx
