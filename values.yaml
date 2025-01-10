@@ -1,4 +1,4 @@
-nameOverride: "frontend"
+nameOverride: ""
 
 replicaCount: 1
 
@@ -7,13 +7,10 @@ kind: Deployment
 image:
   repository: nginx
   pullPolicy: Always
-  tag: ""
+  tag: "latest"
 
 imagePullSecrets:
-  - fintech-harbor
-
-config:
-  EXAMPLE: "EXAMPLE"
+  - image-pull-secret
 
 secrets:
   enabled: false
@@ -21,45 +18,14 @@ secrets:
     enabled: false
     path: ""
 
-fileSecrets:
-  - name: file-secret
-    path: /etc/file-secret
-    source:
-      vault:
-        enabled: false
-        path: ""
-
 service:
   - name: web
     type: ClusterIP
     targetPort: 8080
     port: 80
-    annotations: { }
-  - name: debug
-    type: None
-    targetPort: 3000
-    port: 3000
-    annotations: { }
 
 ingress:
-  enabled: true
-  className: "nginx"
-  annotations: { }
-  hosts:
-    - host: chart-web.local
-      paths:
-        - path: /
-          pathType: Prefix
-          service: web
-    - host: chart-debug.local
-      paths:
-        - path: /
-          pathType: Prefix
-          service: debug
-  tls:
-    - secretName: chart-example-tls
-      hosts:
-        - chart-example.local
+  enabled: false
 
 liveness:
   enabled: true
@@ -88,50 +54,3 @@ resources:
   limits:
     memory: "2Gi"
     cpu: "1000m"
-
-nodeSelector: { }
-
-tolerations: [ ]
-
-affinity: { }
-
-command: |
-  while true; do date; sleep 2; done
-shell: "/bin/bash"
-
-volumes:
- - name: aaa
-   path: /aa
-   size: 10Gi
-   type: dynamic-pvc
-   readOnly: false
-   spec:
-     storageClass: default
- - name: bbb
-   path: /bbb
-   type: static-pvc
-   spec:
-     claimName: my-static-claim
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: false
-  # Annotations to add to the service account
-  annotations: { }
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
-podSpec:
-  annotations: { }
-  securityContext: { }
-container:
-  annotations: { }
-  securityContext: { }
-
-initContainers:
-  - name: test
-    image: test:test
-    command: |
-      echo test
-    shell: "/bin/bash"
