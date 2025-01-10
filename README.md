@@ -1,73 +1,114 @@
-# Spring Boot App Helm Chart
+# onechart
 
-This repository contains a Helm chart template for deploying a Spring Boot application. Below is an overview of the key components, including Deployment, StatefulSet, Service, and configuration settings.
-## Package Generation
+A Helm chart for Kubernetes Application Deployment.
 
-Move in the directory with Chart.yaml file and execute the following command:
-```bash
-cd springboot-app-chart
-helm package .
-```
-This will generate a chart package, `spring-boot-app-chart-0.2.1.tgz`. Modify the package version in the `Chart.yaml` file.
+## Prerequisites
 
-## Application Deployment with External Values File
+- Kubernetes 1.16+
+- Helm 3+
 
-Using an External values files to configure the necessary configurations for the Deployment or StatefulSet, like their image, resource limitations, replicas along with their services and environment variables.
+## Installation
 
-```bash
-helm install <release-name> springboot-app-chart-<version>.tgz -f custom-values.yaml
+To install the chart with the release name `my-release`:
+
+```sh
+helm install my-release ./onechart
 ```
 
-## Key Components
+## Uninstallation
 
-### Deployment
+To uninstall/delete the `my-release` deployment:
 
-The chart includes a **Deployment** configuration that allows you to manage stateless applications. Services and Environment Variables for them can be configured in the values file. You can customize the container behavior, including the number of replicas and container settings. 
-
-### StatefulSet
-
-It also consists of support for StatefulSets. A StatefulSet is ideal for applications that require stable network identifiers, persistent storage, and ordered deployment and scaling. To deploy a **StatefulSet**, you need to ensure that:
-
-```yaml
-  kind: StatefulSet
-```
-is set in your custom values file.
-
-### Service
-
-The chart defines a **Service** to expose the application to other services within the cluster. The default configuration is as follows:
-
-```yaml
-service:
-  type: ClusterIP
-  targetPort: 8080
-  port: 80
+```sh
+helm delete my-release
 ```
 
-### Configure Environment Variables
+## Configuration
 
-The chart supports custom **ENV** via the config section in the values.yaml file. Here’s a sample configuration:
+The following table lists the configurable parameters of the `onechart` chart and their default values.
 
-```yaml
-config:
-  MONGO_URL: "<URL>"
+| Parameter                        | Description                                     | Default                        |
+| -------------------------------- | ----------------------------------------------- | ------------------------------ |
+| `nameOverride`                   | Override the name of the chart                  | `frontend`                     |
+| `replicaCount`                   | Number of replicas                              | `1`                            |
+| `kind`                           | Kubernetes resource kind                        | `StatefulSet`                  |
+| `image.repository`               | Image repository                                | `nginx`                        |
+| `image.pullPolicy`               | Image pull policy                               | `Always`                       |
+| `image.tag`                      | Image tag                                       | `""`                           |
+| `imagePullSecrets`               | Image pull secrets                              | `fintech-harbor`               |
+| `config.EXAMPLE`                 | Example configuration                           | `EXAMPLE`                      |
+| `secrets.enabled`                | Enable secrets                                  | `false`                        |
+| `fileSecrets`                    | File secrets configuration                      | See `values.yaml`              |
+| `service`                        | Service configuration                           | See `values.yaml`              |
+| `ingress.enabled`                | Enable ingress                                  | `true`                         |
+| `ingress.className`              | Ingress class name                              | `nginx`                        |
+| `ingress.hosts`                  | Ingress hosts                                   | See `values.yaml`              |
+| `ingress.tls`                    | Ingress TLS configuration                       | See `values.yaml`              |
+| `liveness`                       | Liveness probe configuration                    | See `values.yaml`              |
+| `readiness`                      | Readiness probe configuration                   | See `values.yaml`              |
+| `resources`                      | Resource requests and limits                    | See `values.yaml`              |
+| `nodeSelector`                   | Node selector                                   | `{}`                           |
+| `tolerations`                    | Tolerations                                     | `[]`                           |
+| `affinity`                       | Affinity                                        | `{}`                           |
+| `command`                        | Command to run in the container                 | `while true; do date; sleep 2; done` |
+| `shell`                          | Shell to use for the command                    | `/bin/bash`                    |
+| `volumes`                        | Volumes configuration                           | See `values.yaml`              |
+| `serviceAccount.create`          | Create a service account                        | `false`                        |
+| `serviceAccount.annotations`     | Annotations for the service account             | `{}`                           |
+| `serviceAccount.name`            | Name of the service account                     | `""`                           |
+| `podSpec.annotations`            | Annotations for the pod spec                    | `{}`                           |
+| `podSpec.securityContext`        | Security context for the pod spec               | `{}`                           |
+| `container.annotations`          | Annotations for the container                   | `{}`                           |
+| `container.securityContext`      | Security context for the container              | `{}`                           |
+| `initContainers`                 | Init containers configuration                   | See `values.yaml`              |
+
+## Notes
+
+After deploying the chart, you can get the application URL by running these commands:
+
+```sh
+export POD_NAME=$(kubectl get pods --namespace <namespace> -l "app.kubernetes.io/name=<chart-name>,app.kubernetes.io/instance=<release-name>" -o jsonpath="{.items[0].metadata.name}")
+export CONTAINER_PORT=$(kubectl get pod --namespace <namespace> $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+echo "Visit http://127.0.0.1:8080 to use your application"
+kubectl --namespace <namespace> port-forward $POD_NAME 8080:$CONTAINER_PORT
 ```
 
-### Other Important Configurations 
-```yaml
-replicaCount: 1
-image:
-  repository: nginx
-  pullPolicy: Always
-  tag: ""
+To check the status of the deployment, run:
 
-resources:
-  requests:
-    memory: "500Mi"
-    cpu: "100m"
-  limits:
-    memory: "1Gi"
-    cpu: "500m"
+```sh
+kubectl get pods --namespace <namespace> -l "app.kubernetes.io/name=<chart-name>,app.kubernetes.io/instance=<release-name>"
 ```
 
-Explore the Values File for further understanding
+To get the logs of the application, run:
+
+```sh
+kubectl logs --namespace <namespace> -l "app.kubernetes.io/name=<chart-name>,app.kubernetes.io/instance=<release-name>"
+```
+
+To delete the deployment, run:
+
+```sh
+helm delete <release-name> --namespace <namespace>
+```
+
+## List of Resources Deployed
+
+```sh
+echo "Deployments:"
+kubectl get deployments -n <namespace> -o custom-columns=NAME:.metadata.name
+
+echo "StatefulSets:"
+kubectl get statefulsets -n <namespace> -o custom-columns=NAME:.metadata.name
+
+echo "Services:"
+kubectl get services -n <namespace> -o custom-columns=NAME:.metadata.name
+
+echo "PersistentVolumeClaims:"
+kubectl get pvc -n <namespace> -o custom-columns=NAME:.metadata.name
+
+echo "ConfigMaps:"
+kubectl get configmaps -n <namespace> -o custom-columns=NAME:.metadata.name
+
+echo "Secrets:"
+kubectl get secrets -n <namespace> -o custom-columns=NAME:.metadata.name
+```
