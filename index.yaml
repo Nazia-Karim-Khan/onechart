@@ -1,14 +1,3 @@
 apiVersion: v1
-entries:
-  springboot-app-chart:
-  - apiVersion: v2
-    appVersion: 0.0.1
-    created: "2024-02-06T02:00:24.993569879+06:00"
-    description: A Helm chart for Kubernetes Spring Boot Application Deployment
-    digest: d5de10ccf86b3555a0d0e130cfdd4d5b4e77bb07b8deb46fe748f310de31dcde
-    name: springboot-app-chart
-    type: application
-    urls:
-    - https://noman5237.github.io/springboot-app-chart/springboot-app-chart-0.2.1.tgz
-    version: 0.2.1
-generated: "2024-02-06T02:00:24.993169768+06:00"
+entries: {}
+generated: "2025-01-10T20:44:35.555680163+06:00"

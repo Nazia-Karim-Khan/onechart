@@ -1,16 +1,20 @@
+{{- $servicePrefix := .Values.nameOverride | default .Release.Name -}}
 {{- range .Values.volumes }}
+{{- if eq .type "dynamic-pvc" }}
+{{- $accessMode := .accessModes | default "ReadWriteOnce" -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .name }}-claim
+  name: {{ $servicePrefix }}-{{ .name }}-data
   namespace: {{ $.Release.Namespace }}
   labels:
-    app: {{ $.Release.Name }}-app
+    app: {{ $servicePrefix }}-app
 spec:
   accessModes:
-    - {{ .accessMode }}
+    - {{ $accessMode }}
   resources:
     requests:
-      storage: {{ .storageSize }}
-  storageClassName: {{ .storageClassName }}
+      storage: {{ .size }}
+  storageClassName: {{ .spec.storageClass }}
+{{- end }}
 {{- end }}

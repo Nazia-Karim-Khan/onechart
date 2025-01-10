@@ -1,24 +1,21 @@
-{{- $servicePrefix:= printf "%s" .Release.Name -}}
+{{- $servicePrefix := .Values.nameOverride | default .Release.Name -}}
+{{- range .Values.service }}
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: {{ .Release.Namespace }}
-  name: {{ $servicePrefix }}-service
-{{- if .Values.service.labels }}
-  labels:
-    {{- with .Values.service.labels }}
+  namespace: {{ $.Release.Namespace }}
+  name: {{ $servicePrefix }}-{{ .name }}-service
+  {{- with .annotations }}
+  annotations:
     {{- toYaml . | nindent 4 }}
-    {{- end }}
-{{- end }}
+  {{- end }}
 spec:
-  type: {{ .Values.service.type }}
-{{- if eq .Values.kind "StatefulSet" }}
-  clusterIP: "None"
-{{- end }}
+  type: {{ .type }}
   selector:
     app: {{ $servicePrefix }}-app
   ports:
-    - name: http
-      port: {{ .Values.service.port }}
-      targetPort: http
+    - name: {{ .name }}
+      port: {{ .port }}
+      targetPort: {{ .targetPort }}
       protocol: TCP
+{{- end }}

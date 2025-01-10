@@ -1,6 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $servicePrefix:= printf "%s" .Release.Name -}}
-{{- $svcPort := .Values.service.port -}}
+{{- $servicePrefix := .Values.nameOverride | default .Release.Name -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -22,16 +21,6 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: {{ $servicePrefix }}-service.devbsfintech23.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ $servicePrefix }}-service
-                port:
-                  number: {{ $svcPort }}
     {{- range .Values.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
@@ -41,9 +30,9 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ $servicePrefix }}-service
+                name: {{ $servicePrefix }}-{{ .service }}-service
                 port:
-                  number: {{ $svcPort }}
+                  name: {{ .service }}
           {{- end }}
     {{- end }}
 {{- end }}

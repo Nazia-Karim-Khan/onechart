@@ -1,13 +1,21 @@
-{{- if eq .Values.kind "Deployment" -}}
+{{- if eq .Values.kind "StatefulSet" -}}
 {{- $servicePrefix := .Values.nameOverride | default .Release.Name -}}
+{{- $headlessServiceName := "" -}}
+{{- range .Values.service }}
+  {{- if eq .type "None" }}
+    {{- $headlessServiceName = .name -}}
+    {{- break -}}
+  {{- end }}
+{{- end }}
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ $servicePrefix }}-deployment
+  name: {{ $servicePrefix }}-statefulset
   labels:
     app: {{ $servicePrefix }}-app
 spec:
+  serviceName: {{ $servicePrefix }}-{{ $headlessServiceName }}-service
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:

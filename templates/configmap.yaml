@@ -1,13 +1,13 @@
-{{- $servicePrefix:= printf "%s" .Release.Name -}}
+{{- $servicePrefix := .Values.nameOverride | default .Release.Name -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: {{ .Release.Namespace }}
   name: {{ $servicePrefix }}-configmap
 data:
+  {{- if .Values.config }}
   {{- with .Values.config }}
     {{- toYaml . | nindent 2 }}
   {{- end }}
-  TZ: "Asia/Dhaka"
-  SERVER_PORT: "{{ .Values.service.targetPort }}"
-  SPRING_PROFILES_ACTIVE: "k8s"
+  TZ: Asia/Dhaka
+  {{- end }}
