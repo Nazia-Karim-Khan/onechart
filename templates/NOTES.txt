@@ -10,22 +10,6 @@
   helm delete {{ .Release.Name }} --namespace {{ .Release.Namespace }}
 
 5. List of resources deployed:
-  echo "Deployments:"
-  kubectl get deployments -n {{ .Release.Namespace }} -o custom-columns=NAME:.metadata.name
-
-  echo "StatefulSets:"
-  kubectl get statefulsets -n {{ .Release.Namespace }} -o custom-columns=NAME:.metadata.name
-
-  echo "Services:"
-  kubectl get services -n {{ .Release.Namespace }} -o custom-columns=NAME:.metadata.name
-
-  echo "PersistentVolumeClaims:"
-  kubectl get pvc -n {{ .Release.Namespace }} -o custom-columns=NAME:.metadata.name
-
-  echo "ConfigMaps:"
-  kubectl get configmaps -n {{ .Release.Namespace }} -o custom-columns=NAME:.metadata.name
-
-  echo "Secrets:"
-  kubectl get secrets -n {{ .Release.Namespace }} -o custom-columns=NAME:.metadata.name
+  kubectl get all -l onechart.kubernetes.io/name={{ .Release.Name }} -n {{ .Release.Namespace }}
 
 {{ .Release.Name }} has been deployed to your Kubernetes cluster. Happy Kubernetting!

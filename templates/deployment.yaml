@@ -7,6 +7,7 @@ metadata:
   name: {{ $servicePrefix }}-deployment
   labels:
     app: {{ $servicePrefix }}-app
+    onechart.kubernetes.io/name: {{ $servicePrefix }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -18,16 +19,18 @@ spec:
         app: {{ $servicePrefix }}-app
       annotations:
         rollme: {{ randAlphaNum 16 | quote }}
-      {{- with .Values.podSpec.annotations }}
-        {{- toYaml . | nindent 8 }}
+      {{- if .Values.podSpec.annotations }}
+      {{- toYaml .Values.podSpec.annotations | nindent 8 }}
       {{- end }}
     spec:
       imagePullSecrets:
         {{- range .Values.imagePullSecrets }}
         - name: {{ . }}
         {{- end }}
+      {{- if .Values.podSpec.securityContext }}
       securityContext:
         {{- toYaml .Values.podSpec.securityContext | nindent 8 }}
+      {{- end }}
       {{- if .Values.initContainers }}
       initContainers:
         {{- range .Values.initContainers }}
@@ -108,6 +111,7 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if gt (len .Values.volumes) 0 }}
           volumeMounts:
             {{- range .Values.volumes }}
             - name: {{ .name }}-volume
@@ -119,6 +123,7 @@ spec:
               readOnly: true
               {{- end }}
             {{- end }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

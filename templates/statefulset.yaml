@@ -14,6 +14,7 @@ metadata:
   name: {{ $servicePrefix }}-statefulset
   labels:
     app: {{ $servicePrefix }}-app
+    onechart.kubernetes.io/name: {{ $servicePrefix }}
 spec:
   serviceName: {{ $servicePrefix }}-{{ $headlessServiceName }}-service
   replicas: {{ .Values.replicaCount }}

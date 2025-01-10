@@ -6,6 +6,8 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   name: {{ $servicePrefix }}-{{ .name }}-service
   {{- with .annotations }}
+  labels:
+    onechart.kubernetes.io/name: {{ $servicePrefix }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}

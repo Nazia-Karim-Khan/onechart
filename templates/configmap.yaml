@@ -4,10 +4,12 @@ kind: ConfigMap
 metadata:
   namespace: {{ .Release.Namespace }}
   name: {{ $servicePrefix }}-configmap
+  labels:
+    onechart.kubernetes.io/name: {{ $servicePrefix }}
 data:
   {{- if .Values.config }}
   {{- with .Values.config }}
     {{- toYaml . | nindent 2 }}
   {{- end }}
-  TZ: Asia/Dhaka
   {{- end }}
+  TZ: Asia/Dhaka

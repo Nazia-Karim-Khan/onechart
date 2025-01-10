@@ -54,3 +54,12 @@ resources:
   limits:
     memory: "2Gi"
     cpu: "1000m"
+
+volumes: []
+
+podSpec:
+  annotations: { }
+  securityContext: { }
+container:
+  annotations: { }
+  securityContext: { }

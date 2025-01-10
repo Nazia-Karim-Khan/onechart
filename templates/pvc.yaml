@@ -9,6 +9,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     app: {{ $servicePrefix }}-app
+    onechart.kubernetes.io/name: {{ $servicePrefix }}
 spec:
   accessModes:
     - {{ $accessMode }}
