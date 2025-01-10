@@ -1,3 +1,14 @@
 apiVersion: v1
-entries: {}
-generated: "2025-01-10T20:44:35.555680163+06:00"
+entries:
+  onechart:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-01-10T21:11:18.474349793+06:00"
+    description: A Helm chart for Kubernetes Application Deployment
+    digest: 5bec9925866dce054ba7e101b4d9ed373f274ff16a7e0764644a41a00ed8d982
+    name: onechart
+    type: application
+    urls:
+    - https://noman5237.github.io/onechart/onechart-0.3.0.tgz
+    version: 0.3.0
+generated: "2025-01-10T21:11:18.47379577+06:00"
