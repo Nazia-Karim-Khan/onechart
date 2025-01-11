@@ -122,11 +122,11 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podSpec:
-  annotations: { }
-  securityContext: { }
 container:
   annotations: { }
+  env:
+    - name: HELLO
+      value: "hello"
   securityContext: { }
 
 initContainers:
@@ -135,3 +135,6 @@ initContainers:
     command: |
       echo test
     shell: "/bin/bash"
+    env:
+      - name: TEST
+        value: "test"

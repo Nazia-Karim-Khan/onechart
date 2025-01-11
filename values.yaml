@@ -9,8 +9,7 @@ image:
   pullPolicy: Always
   tag: "latest"
 
-imagePullSecrets:
-  - image-pull-secret
+imagePullSecrets: []
 
 secrets:
   enabled: false
@@ -57,9 +56,5 @@ resources:
 
 volumes: []
 
-podSpec:
-  annotations: { }
-  securityContext: { }
-container:
-  annotations: { }
-  securityContext: { }
+podSpec: {}
+container: {}

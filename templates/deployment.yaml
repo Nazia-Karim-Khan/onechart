@@ -39,10 +39,25 @@ spec:
           imagePullPolicy: {{ $.Values.image.pullPolicy | default "Always" }}
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
+          {{- if .command }}
           command:
             - {{ .shell }}
             - -c
             - {{ .command | quote }}
+          {{- end }}
+          {{- if .args }}
+          args:
+          {{- toYaml .args | nindent 12 }}
+          {{- end }}
+          {{- if or $.Values.container.env .env }}
+          env:
+          {{- if $.Values.container.env }}
+          {{- toYaml $.Values.container.env | nindent 12 }}
+          {{- end }}
+          {{- if .env }}
+          {{- toYaml .env | nindent 12 }}
+          {{- end }}
+          {{- end }}
           volumeMounts:
             {{- range $.Values.volumes }}
             - name: {{ .name }}-volume
@@ -58,6 +73,10 @@ spec:
       {{- end }}
       containers:
         - name: {{ $servicePrefix }}-container
+          {{- if .Values.container.env }}
+          env:
+          {{- toYaml .Values.container.env | nindent 12 }}
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ $servicePrefix }}-configmap
@@ -72,6 +91,10 @@ spec:
             - {{ .Values.shell }}
             - -c
             - {{ .Values.command | quote }}
+          {{- end }}
+          {{- if .Values.container.args }}
+          args:
+          {{- toYaml .Values.container.args | nindent 12 }}
           {{- end }}
           ports:
             {{- range .Values.service }}
