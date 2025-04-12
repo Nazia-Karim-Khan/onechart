@@ -12,7 +12,10 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  type: {{ .type }}
+  type: {{ if eq .type "Headless" }}ClusterIP{{ else }}{{ .type }}{{ end }}
+  {{- if eq .type "Headless" }}
+  clusterIP: None
+  {{- end }}
   selector:
     app: {{ $servicePrefix }}-app
   ports:

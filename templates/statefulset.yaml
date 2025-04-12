@@ -2,7 +2,7 @@
 {{- $servicePrefix := .Values.nameOverride | default .Release.Name -}}
 {{- $headlessServiceName := "" -}}
 {{- range .Values.service }}
-  {{- if eq .type "None" }}
+  {{- if eq .type "Headless" }}
     {{- $headlessServiceName = .name -}}
     {{- break -}}
   {{- end }}
