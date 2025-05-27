@@ -23,6 +23,10 @@ spec:
       {{- toYaml .Values.podSpec.annotations | nindent 8 }}
       {{- end }}
     spec:
+      {{- if .Values.hostAliases }}
+      hostAliases:
+        {{- toYaml .Values.hostAliases | nindent 8 }}
+      {{- end }}
       imagePullSecrets:
         {{- range .Values.imagePullSecrets }}
         - name: {{ . }}
