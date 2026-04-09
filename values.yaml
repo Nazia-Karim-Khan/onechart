@@ -31,8 +31,8 @@ liveness:
   method: http
   service: web
   path: "/"
-  initialDelaySeconds: 70
-  periodSeconds: 1
+  initialDelaySeconds: 0
+  periodSeconds: 24
   successThreshold: 1
   failureThreshold: 5
 
@@ -41,9 +41,9 @@ readiness:
   method: http
   service: web
   path: "/"
-  initialDelaySeconds: 70
-  periodSeconds: 1
-  successThreshold: 1
+  initialDelaySeconds: 0
+  periodSeconds: 20
+  successThreshold: 3
   failureThreshold: 5
 
 startup:
@@ -51,10 +51,10 @@ startup:
   method: http
   service: web
   path: "/"
-  initialDelaySeconds: 70
-  periodSeconds: 1
+  initialDelaySeconds: 10
+  periodSeconds: 5
   successThreshold: 1
-  failureThreshold: 30
+  failureThreshold: 60
 
 resources:
   requests:
