@@ -18,7 +18,7 @@ secrets:
     path: ""
 
 service:
-  - name: web
+  - name: api
     type: ClusterIP
     targetPort: 8080
     port: 80
@@ -29,32 +29,32 @@ ingress:
 liveness:
   enabled: true
   method: http
-  service: web
-  path: "/"
-  initialDelaySeconds: 70
-  periodSeconds: 1
+  service: api
+  path: "/actuator/health/liveness"
+  initialDelaySeconds: 0
+  periodSeconds: 24
   successThreshold: 1
   failureThreshold: 5
 
 readiness:
   enabled: true
   method: http
-  service: web
-  path: "/"
-  initialDelaySeconds: 70
-  periodSeconds: 1
+  service: api
+  path: "/actuator/health/readiness"
+  initialDelaySeconds: 0
+  periodSeconds: 20
   successThreshold: 1
-  failureThreshold: 5
+  failureThreshold: 3
 
 startup:
-  enabled: false
+  enabled: true
   method: http
-  service: web
-  path: "/"
-  initialDelaySeconds: 70
-  periodSeconds: 1
+  service: api
+  path: "/actuator/health/startup"
+  initialDelaySeconds: 10
+  periodSeconds: 5
   successThreshold: 1
-  failureThreshold: 30
+  failureThreshold: 60
 
 resources:
   requests:
