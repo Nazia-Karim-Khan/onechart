@@ -47,7 +47,7 @@ readiness:
   failureThreshold: 5
 
 startup:
-  enabled: false
+  enabled: true
   method: http
   service: web
   path: "/"
