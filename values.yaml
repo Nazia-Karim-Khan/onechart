@@ -50,7 +50,7 @@ startup:
   enabled: true
   method: http
   service: api
-  path: "/actuator/health/startup"
+  path: "/actuator/health/readiness"
   initialDelaySeconds: 10
   periodSeconds: 5
   successThreshold: 1
