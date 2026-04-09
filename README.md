@@ -46,6 +46,7 @@ The following table lists the configurable parameters of the `onechart` chart an
 | `ingress.tls`                    | Ingress TLS configuration                       | See `values.yaml`              |
 | `liveness`                       | Liveness probe configuration                    | See `values.yaml`              |
 | `readiness`                      | Readiness probe configuration                   | See `values.yaml`              |
+| `startup`                        | Startup probe configuration                     | See `values.yaml`              |
 | `resources`                      | Resource requests and limits                    | See `values.yaml`              |
 | `nodeSelector`                   | Node selector                                   | `{}`                           |
 | `tolerations`                    | Tolerations                                     | `[]`                           |

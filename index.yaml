@@ -21,4 +21,14 @@ entries:
     urls:
     - https://noman5237.github.io/onechart/onechart-0.3.1.tgz
     version: 0.3.1
-generated: "2025-05-27T17:40:08.642854927+06:00"
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2026-04-09T09:06:13.808970513+06:00"
+    description: A Helm chart for Kubernetes Application Deployment
+    digest: e0db1b48e02e0084d2fa311202ae12ae14ad11d69daa4985e13da029b59c2193
+    name: onechart
+    type: application
+    urls:
+    - https://noman5237.github.io/onechart/onechart-0.3.2.tgz
+    version: 0.3.2
+generated: "2026-04-09T09:06:13.808212792+06:00"
