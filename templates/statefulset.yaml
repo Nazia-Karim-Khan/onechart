@@ -89,6 +89,21 @@ spec:
               containerPort: {{ .targetPort }}
               protocol: TCP
             {{- end }}
+          {{- if .Values.startup.enabled }}
+          startupProbe:
+            {{- if eq .Values.startup.method "http" }}
+            httpGet:
+              path: {{ .Values.startup.path }}
+            {{- end }}
+            {{- if eq .Values.startup.method "tcp" }}
+            tcpSocket:
+            {{- end }}
+              port: {{ .Values.startup.service }}
+            initialDelaySeconds: {{.Values.startup.initialDelaySeconds}}
+            periodSeconds: {{.Values.startup.periodSeconds}}
+            successThreshold: {{.Values.startup.successThreshold}}
+            failureThreshold: {{.Values.startup.failureThreshold}}
+          {{- end }}
           {{- if .Values.liveness.enabled }}
           livenessProbe:
             {{- if eq .Values.liveness.method "http" }}

@@ -46,6 +46,16 @@ readiness:
   successThreshold: 1
   failureThreshold: 5
 
+startup:
+  enabled: false
+  method: http
+  service: web
+  path: "/"
+  initialDelaySeconds: 70
+  periodSeconds: 1
+  successThreshold: 1
+  failureThreshold: 30
+
 resources:
   requests:
     memory: "500Mi"
