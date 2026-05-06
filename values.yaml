@@ -15,7 +15,25 @@ secrets:
   enabled: false
   vault:
     enabled: false
-    path: ""
+    # Team identifier (e.g. "dev", "qa"). Combined with .Release.Namespace to
+    # derive role <team>-<namespace>-db and secret path <team>-<namespace>/creds/<team>.
+    team: ""
+    # Optional per-service overrides (defaults applied in the chart):
+    # authPath:     "auth/dev-cluster"
+    # service:      "http://vault.vault.svc.cluster.local:8200"
+    # agentCache:   true
+    # refreshUrl:   "http://127.0.0.1:8080/actuator/refresh"
+    # role:         derived from team+namespace
+    # secretPath:   derived from team+namespace
+   
+    # List of env-var names to inject from the vault secret. The vault field
+    # is derived from the last underscore-separated segment, lowercased:
+    #   MASTER_DB_USERNAME -> .Data.username
+    #   MASTER_DB_PASSWORD -> .Data.password
+    keys: 
+      - MASTER_DB_USERNAME
+      - MASTER_DB_PASSWORD
+    
 
 service:
   - name: api
