@@ -60,3 +60,33 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Vault role: explicit override or <team>-<namespace>.
+*/}}
+{{- define "onechart.vaultRole" -}}
+{{- $vault := .Values.secrets.vault -}}
+{{- $vault.role | default (printf "%s-%s-db" $vault.team .Release.Namespace) -}}
+{{- end -}}
+
+{{/*
+Vault secret path: explicit override or <team>-<namespace>/creds/<team>.
+*/}}
+{{- define "onechart.vaultSecretPath" -}}
+{{- $vault := .Values.secrets.vault -}}
+{{- $vault.secretPath | default (printf "%s-%s/creds/%s" $vault.team .Release.Namespace $vault.team) -}}
+{{- end -}}
+
+{{/*
+Body of the vault-injected database.properties template. Emits the literal
+{{ .Data.<field> }} expressions for the vault agent to render at pod start.
+*/}}
+{{- define "onechart.vaultDatabaseTemplate" -}}
+{{- $secretPath := include "onechart.vaultSecretPath" . -}}
+{{ printf "{{- with secret %q }}" $secretPath }}
+{{- range $env := .Values.secrets.vault.keys }}
+{{- $field := $env | splitList "_" | last | lower }}
+{{ $env }}={{ printf "{{ .Data.%s }}" $field }}
+{{- end }}
+{{ "{{- end }}" }}
+{{- end -}}
