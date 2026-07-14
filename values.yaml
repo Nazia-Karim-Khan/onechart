@@ -66,5 +66,6 @@ resources:
 
 volumes: []
 
-podSpec: {}
+podSpec:
+  labels: {}
 container: {}

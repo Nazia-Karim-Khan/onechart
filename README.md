@@ -51,6 +51,7 @@ The following table lists the configurable parameters of the `onechart` chart an
 | `nodeSelector`                   | Node selector                                   | `{}`                           |
 | `tolerations`                    | Tolerations                                     | `[]`                           |
 | `affinity`                       | Affinity                                        | `{}`                           |
+| `podSpec.labels`                 | Labels to add to workload pods                  | `{}`                           |
 | `command`                        | Command to run in the container                 | `while true; do date; sleep 2; done` |
 | `shell`                          | Shell to use for the command                    | `/bin/bash`                    |
 | `volumes`                        | Volumes configuration                           | See `values.yaml`              |

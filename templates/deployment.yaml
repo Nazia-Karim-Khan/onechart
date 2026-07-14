@@ -17,6 +17,9 @@ spec:
     metadata:
       labels:
         app: {{ $servicePrefix }}-app
+        {{- with .Values.podSpec.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       annotations:
         rollme: {{ randAlphaNum 16 | quote }}
       {{- if .Values.podSpec.annotations }}
