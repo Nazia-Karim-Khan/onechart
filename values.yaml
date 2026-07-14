@@ -66,6 +66,10 @@ resources:
 
 volumes: []
 
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+
 podSpec:
   labels: {}
 container: {}

@@ -1,0 +1,16 @@
+{{- if .Values.podDisruptionBudget.enabled -}}
+{{- $servicePrefix := .Values.nameOverride | default .Release.Name -}}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ $servicePrefix }}
+  labels:
+    app: {{ $servicePrefix }}-app
+    onechart.kubernetes.io/name: {{ $servicePrefix }}
+spec:
+  minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
+  selector:
+    matchLabels:
+      app: {{ $servicePrefix }}-app
+{{- end }}

@@ -51,6 +51,8 @@ The following table lists the configurable parameters of the `onechart` chart an
 | `nodeSelector`                   | Node selector                                   | `{}`                           |
 | `tolerations`                    | Tolerations                                     | `[]`                           |
 | `affinity`                       | Affinity                                        | `{}`                           |
+| `podDisruptionBudget.enabled`    | Create a PodDisruptionBudget                    | `false`                        |
+| `podDisruptionBudget.minAvailable` | Minimum available Pods during voluntary disruptions | `1`                        |
 | `podSpec.labels`                 | Labels to add to workload pods                  | `{}`                           |
 | `command`                        | Command to run in the container                 | `while true; do date; sleep 2; done` |
 | `shell`                          | Shell to use for the command                    | `/bin/bash`                    |
